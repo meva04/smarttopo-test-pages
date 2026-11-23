@@ -27,6 +27,9 @@
 @keyframes st26-pop{from{opacity:0;transform:translateY(14px) scale(.9)}}
 @keyframes st26-rv{from{opacity:0;transform:translateY(56px)}}
 @keyframes st26-cut{from{transform:scaleX(0)}}
+@keyframes st26-in{from{opacity:0;transform:translateX(28%) scale(.94);filter:brightness(1.25)}to{opacity:1;transform:none;filter:none}}
+@keyframes st26-out{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-18%) scale(.94)}}
+@keyframes st26-blink{0%{opacity:0}25%{opacity:.55}100%{opacity:0}}
 /* 사이트(stopo.co.kr 제품소개) 안에 들어갔을 때: 서브 탭 바로 아래에서 히어로가 시작되도록 콘텐츠 영역 상단 여백 제거.
    이 블록이 있는 페이지에서만 적용됩니다. */
 #contents .subCont:has(#st26){padding-top:0}
@@ -71,7 +74,8 @@
   .btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:600 18px/1 var(--f-body);padding:13px 22px;border-radius:999px;text-decoration:none;transition:transform .35s var(--ease),background .2s,box-shadow .3s}
   .btn-blue{background:var(--blue);color:#fff;box-shadow:0 8px 20px -10px rgba(1,154,235,.6)}
   .btn-blue:hover{background:#0b8fd6}
-  .btn-ghost{background:var(--surface);color:var(--navy);border:1px solid var(--line)}
+  .btn-ghost{background:var(--surface);color:var(--navy);}
+  .btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}   /* 앱 다운로드 아이콘 (메인 section01과 같은 모양) */
   .btn-ghost:hover{background:var(--blue-soft);border-color:var(--blue)}
   @media (max-width:820px){.nav ul{display:none}.nav .btn{margin-left:auto}}
   /* ---------- hero ---------- */
@@ -89,21 +93,31 @@
   .hero-stage{position:relative;justify-self:center;width:min(330px,80vw)}
   .readout{position:absolute;z-index:3;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-family:var(--f-mono);font-size:12.5px;color:var(--navy);font-weight:500;box-shadow:0 18px 36px -20px rgba(0,48,84,.45);white-space:nowrap;transition:transform .6s var(--ease)}
   .readout .lbl{color:var(--ink-2);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
-  .readout.r1{left:-150px;top:70px}
+  .readout.r1{left:-216px;top:60px}
   .readout.r2{right:-118px;top:300px}
-  .readout.r3{left:-118px;bottom:60px}
+  .readout.r3{left:-164px;bottom:60px}
   .readout .row{display:flex;justify-content:space-between;gap:16px}
   .readout .ok{color:var(--blue)}
-  .pill{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:44px;height:38px;border-radius:12px;font-size:10px;line-height:1.1;color:#fff;font-family:var(--f-body)}
-  .pill b{font-size:13px}
+  /* r2 상태 칩: Figma 69:116319 (모양만 참고 · 값은 목업 영상과 같게 — 남색 블록 안에 칩 4개, 칩 42px·모서리 16px, 라벨 10px 흰색 70% + 값 14px) */
+  .pill{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:42px;padding:8px 6px;border-radius:16px;font:700 10px/1 var(--f-body);color:rgba(241,241,246,.7);white-space:nowrap;text-align:center}
+  .pill b{font-size:14px;line-height:1;color:#fff;font-weight:700}
   .pill.a{background:var(--amber)}
   .pill.b{background:var(--blue)}
-  .readout.r2{display:flex;gap:6px;padding:8px}
+  .readout.r2{display:flex;gap:6px;padding:8px;background:var(--navy);border:0;border-radius:22px;box-shadow:0 18px 36px -18px rgba(0,48,84,.6)}   /* 칩 뒤 남색 블록 (r1과 같은 톤) */
+  /* r3 정밀도 카드: Figma 69:116344 체크박스 행을 세로로 — 남색 블록, 체크 18px + 라벨(흰색 70%) + 값(흰색) 16px */
+  .readout.r3{background:var(--navy);border:0;border-radius:16px;padding:16px 18px;display:grid;gap:9px;font:600 16px/1 var(--f-body);color:rgba(241,241,246,.7);font-variant-numeric:tabular-nums;box-shadow:0 18px 36px -18px rgba(0,48,84,.6)}
+  .readout.r3 .row{justify-content:flex-start;align-items:center;gap:6px;font-size:inherit;line-height:1}
+  .readout.r3 .ck{display:block;width:18px;height:18px;flex:none}
+  .readout.r3 .ok{color:#f1f1f6;margin-left:-2px}
+  /* r1 좌표 카드: Figma 82:125104 기반 — 남색 불투명, 흰색 굵은 17px, 휴대폰 목업과 간격 둠 */
+  .readout.r1{background:var(--navy);border:0;border-radius:16px;padding:16px 18px;display:grid;gap:7px;font:700 17px/1 var(--f-body);color:#f1f1f6;font-variant-numeric:tabular-nums;box-shadow:0 18px 36px -18px rgba(0,48,84,.6)}
+  .readout.r1 .row{justify-content:flex-start;gap:8px;font-size:inherit;line-height:1}   /* 사이트 CSS가 div를 13px로 고정해서 상속으로 되돌림 */
+  .readout.r1 .row>span:first-child{width:40px;flex:none}
   @media (max-width:960px){
     .hero .wrap{grid-template-columns:1fr;padding-block:64px 72px}
     .readout.r1{left:-14px;top:40px}.readout.r2{right:-14px;top:auto;bottom:150px}.readout.r3{left:-14px;bottom:24px}
   }
-  @media (max-width:420px){.readout{font-size:11px}.readout.r1{left:-8px}.readout.r3{left:-8px}.readout.r2{right:-8px}}
+  @media (max-width:420px){.readout{font-size:11px}.readout.r1{left:-8px;font-size:13px;padding:12px 14px;border-radius:12px;gap:5px}.readout.r1 .row>span:first-child{width:32px}.readout.r3{left:-8px;font-size:13px;padding:12px 14px;gap:7px}.readout.r3 .ck{width:15px;height:15px}.readout.r2{right:-8px}}
   /* reticle */
   .reticle{position:absolute;pointer-events:none;z-index:1;inset:0;opacity:0;transition:opacity .3s}
   .hero:hover .reticle{opacity:1}
@@ -146,9 +160,12 @@
   .fgrid>.flist{padding-right:16px}
   .stage{position:sticky;top:70px;height:calc(100vh - 140px);max-height:820px;display:flex;align-items:center;justify-content:center;gap:24px}
   .stage .phone{width:min(310px,calc((100vh - 230px) * .47));flex:none}
-  .stage .media>video,.stage .media>img{clip-path:inset(100% 0 0 0);transition:clip-path .8s var(--ease)}
-  .stage .media>.on{clip-path:inset(0 0 0 0);z-index:2}
-  .stage .media>.was{clip-path:inset(0 0 0 0);z-index:1}
+  /* 목업 화면 전환: 비슷한 화면끼리도 바뀐 게 보이도록 새 화면은 오른쪽에서 밀려 들어오고, 이전 화면은 왼쪽으로 빠지며 흐려짐 + 화면 위 살짝 번쩍임 */
+  .stage .media>video,.stage .media>img{opacity:0}
+  .stage .media>.on{opacity:1;z-index:2;animation:st26-in .7s var(--ease) both}
+  .stage .media>.was{z-index:1;animation:st26-out .7s var(--ease) both}
+  .stage .media::after{content:"";position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none}
+  .stage .media.swap::after{animation:st26-blink .5s ease-out}
   .rail{display:flex;flex-direction:column;align-items:center;gap:14px;font-family:var(--f-mono);font-size:18px;color:var(--ink-2)}
   .rail i{position:relative;display:block;width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .3s,transform .4s var(--ease)}
   .rail i.on{background:var(--blue);transform:scale(1)}
@@ -159,12 +176,14 @@
   .fitem .no::after{content:"";height:2px;width:80px;background:currentColor;}
   .fitem h3{font-size:clamp(28px,3.4vw,42px);font-weight:800}
   .fitem .sum{font-size:24px;font-weight:700;color:var(--ink)}
-  .fitem p.desc{color:var(--ink-2);font-size:18px;max-width:36em; line-height:1.6;}
+  .fitem p.desc{color:var(--ink-2);font-size:18px;max-width:30em; line-height:1.6;}
   .thumbs{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
-  .thumb{width:96px;aspect-ratio:540/1033;border-radius:14px;overflow:hidden;border:2px solid var(--line);padding:0;cursor:pointer;background:var(--bg);transition:transform .35s var(--ease),border-color .2s}
+  .thumb{width:96px;aspect-ratio:540/1033;border-radius:14px;overflow:hidden;border:2px solid var(--line);padding:0;cursor:pointer;background:var(--bg);transition:transform .35s var(--ease),border-color .2s,opacity .3s}
   .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
-  .thumb:hover{transform:translateY(-4px)}
-  .thumb[aria-pressed="true"]{border-color:var(--blue)}
+  .thumb:hover{transform:translateY(-4px);opacity:.8}
+  .thumb[aria-pressed="false"]{opacity:.4}   /* 선택 안 된 섬네일은 반투명 */
+  .thumb[aria-pressed="false"]:hover{opacity:1}   /* 마우스를 올리면 다시 선명하게 */
+  .thumb[aria-pressed="true"]{border-color:var(--blue);opacity:1;box-shadow:0 8px 18px -10px rgba(1,154,235,.7)}
   .thumb.vid{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font:500 18px var(--f-body);color:var(--ink-2)}
   .thumb.vid svg{width:26px;height:26px;fill:var(--blue)}
   .report{margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px;overflow:hidden}
@@ -190,7 +209,7 @@
   .utile .phone{position:absolute;transition:transform .9s var(--ease)}
   .utile .phone{transform-origin:50% 50%}
   .uitem:hover .utile .phone{transform:scale(1.03)}
-  .uitem figcaption{font-size:18px;line-height:1.55;color:var(--ink-2);padding-inline:6px;max-width:30em; font-weight:600}
+  .uitem figcaption{font-size:18px;line-height:1.55;color:var(--ink-2);padding-inline:6px;max-width:30em; font-weight:500}
   .uitem figcaption b{color:var(--ink);font-weight:800}
   .ucar-ctl{display:flex;justify-content:flex-end;gap:12px;margin-top:28px}
   .ucar-ctl button{width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;background:var(--chip);color:var(--ink);display:grid;place-items:center;transition:background .2s,opacity .2s,transform .3s var(--ease)}
@@ -274,6 +293,7 @@
   @media (prefers-reduced-motion:reduce){
     .closing img.sym{animation:none}
     .stage .media>*,.utile .media>img{transition:none}
+    .stage .media>*,.stage .media.swap::after{animation:none}
   }
 }
 </style>
@@ -290,8 +310,8 @@
       </h1>
       <p class="lead ld" style="--d:5">새로운 SmartTopo는 측량 현장의 작업 단계를 줄이는 데 집중했습니다. <br>지도에서 바로 측량·측설을 시작할 수 있으며, 사진 좌표 획득과 공공측량용 기준점측량 기능 탑재로 한층 폭넓은 측량 업무를 완성합니다.</p>
       <div class="ctas ld" style="--d:6">
-        <a class="btn btn-blue mag" href="#features">신기능 살펴보기 <span aria-hidden="true">↓</span></a>
-        <a class="btn btn-ghost mag" href="https://play.google.com/store/apps/details?id=kr.co.geosys.SmartTopo207" target="_blank" rel="noopener">다운로드</a>
+        <a class="btn btn-blue mag" href="#features">새로운 기능 살펴보기 <span aria-hidden="true">↓</span></a>
+        <a class="btn btn-ghost mag" href="https://play.google.com/store/apps/details?id=kr.co.geosys.SmartTopo207" target="_blank" rel="noopener">앱 다운로드 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/></svg></a>
       </div>
     </div>
     <div class="hero-stage" id="heroStage">
@@ -299,7 +319,6 @@
         <video src="assets/f2.mp4" poster="assets/s2a.webp" autoplay muted loop playsinline aria-label="빠른 측설 화면 녹화"></video>
       </div></div>
       <div class="readout r1" style="--d:0" data-depth="18">
-        <span class="lbl">RTK · 고정해</span>
         <div class="row"><span>X(N)</span><span id="cx">549278.428</span></div>
         <div class="row"><span>Y(E)</span><span id="cy">194656.079</span></div>
         <div class="row"><span>Z(H)</span><span id="cz">27.063</span></div>
@@ -308,10 +327,9 @@
         <span class="pill a">IMU<b>OFF</b></span><span class="pill b">GNSS<b id="gn">16</b></span><span class="pill b">보정<b>양호</b></span><span class="pill b">상태<b>고정</b></span>
       </div>
       <div class="readout r3" style="--d:2" data-depth="10">
-        <span class="lbl">정밀도</span>
-        <div class="row"><span>PDOP</span><span class="ok" id="pd">1.7</span></div>
-        <div class="row"><span>H</span><span class="ok" id="ph">0.017</span></div>
-        <div class="row"><span>V</span><span class="ok" id="pv">0.030</span></div>
+        <div class="row"><img class="ck" src="assets/check_on.svg" alt="" width="18" height="18"><span>PDOP</span><span class="ok" id="pd">1.7</span></div>
+        <div class="row"><img class="ck" src="assets/check_on.svg" alt="" width="18" height="18"><span>H</span><span class="ok" id="ph">0.017</span></div>
+        <div class="row"><img class="ck" src="assets/check_on.svg" alt="" width="18" height="18"><span>V</span><span class="ok" id="pv">0.030</span></div>
       </div>
     </div>
   </div>
@@ -376,8 +394,8 @@
       </div>
     </div>
     <div class="spec-notes rv">
-      <p>※ 정확한 AR 기능을 사용하려면 ‘깊이 API’를 지원하는 스마트폰이어야 합니다(갤럭시 기준 S8 이상). 지원 기기 확인: <a href="https://developers.google.com/ar/devices" target="_blank" rel="noopener">developers.google.com/ar/devices</a></p>
-      <p>※ 스마트토포는 위성측량장비를 제어하는 고정밀측량 앱입니다. 로그인 방식으로 사용권한이 부여되며, ‘내업’을 통하여 GNSS 연결 이외의 기능을 사용하고 확인할 수 있습니다.</p>
+      <p>※ 정확한 AR 기능을 사용하려면 ‘깊이 API’를 지원하는 스마트폰이어야 합니다(갤럭시 기준 S8 이상). <br>지원 기기 확인: <a href="https://developers.google.com/ar/devices" target="_blank" rel="noopener">developers.google.com/ar/devices</a></p>
+      <p>※ 스마트토포는 위성측량장비를 제어하는 고정밀측량 앱입니다. 로그인 방식으로 사용권한이 부여되며,<br> ‘내업’을 통하여 GNSS 연결 이외의 기능을 사용하고 확인할 수 있습니다.</p>
     </div>
   </div>
 </section>
@@ -488,11 +506,12 @@ F.forEach((f,i)=>{
   scr.appendChild(v);
   const t=document.createElement('i');t.innerHTML=`<span>${f.t}</span>`;rail.appendChild(t);
 });
-const still=document.createElement('img');still.alt='';scr.appendChild(still);
+/* 이미지 레이어 2장을 번갈아 써서 이미지→이미지로 바뀔 때도 전환 효과가 나오게 함 */
+const stills=[0,1].map(()=>{const m=document.createElement('img');m.alt='';scr.appendChild(m);return m});
 list.querySelectorAll('.m-phone .screen').forEach(dev);
 const vids=[...scr.querySelectorAll('video')],ticks=[...rail.children];
 let cur=-1,layer=null;
-function show(el){ if(layer===el) return; if(layer){layer.classList.remove('on');layer.classList.add('was');const old=layer;setTimeout(()=>old.classList.remove('was'),820)} el.classList.remove('was');el.classList.add('on');layer=el; }
+function show(el){ if(layer===el) return; if(layer){layer.classList.remove('on');layer.classList.add('was');const old=layer;setTimeout(()=>old.classList.remove('was'),720);scr.classList.remove('swap');void scr.offsetWidth;scr.classList.add('swap')} el.classList.remove('was');el.classList.add('on');layer=el; }
 function vidOn(i){const v=vids[i];if(!v.src)v.src=v.dataset.src;vids.forEach((x,j)=>{if(j!==i)x.pause()});if(!RM)v.play().catch(()=>{});show(v)}
 function setActive(i){
   if(i===cur) return; cur=i;
@@ -505,7 +524,7 @@ list.addEventListener('click',e=>{
   const b=e.target.closest('.thumb');if(!b)return;
   const i=+b.dataset.f;setActive(i);
   b.parentElement.querySelectorAll('.thumb').forEach(x=>x.setAttribute('aria-pressed',x===b));
-  if(b.classList.contains('vid')){vidOn(i)}else{still.src=b.dataset.src;still.alt=b.getAttribute('aria-label');vids[i].pause();show(still)}
+  if(b.classList.contains('vid')){vidOn(i)}else{if(layer&&layer.tagName==='IMG'&&layer.getAttribute('src')===b.dataset.src)return;const still=stills[0]===layer?stills[1]:stills[0];still.src=b.dataset.src;still.alt=b.getAttribute('aria-label');vids[i].pause();show(still)}
 });
 const desk=matchMedia('(min-width: 961px)');
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&desk.matches)setActive(+e.target.dataset.i)})},{rootMargin:'-45% 0px -45% 0px'});

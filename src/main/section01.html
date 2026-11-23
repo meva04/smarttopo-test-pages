@@ -61,7 +61,7 @@
   h1 .k{display:block;overflow:hidden}
   h1 .k>span{display:inline-block}
   h1 em{font-style:normal;color:var(--amber)}
-  .lead{margin-top:24px;color:var(--sub);max-width:30em}
+  .lead{margin-top:24px;color:var(--sub);max-width:29em}
   .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
   .btn{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;font:600 18px/1 var(--f-body);padding:15px 24px;border-radius:999px;transition:transform .35s var(--ease),background .2s,border-color .2s}
   .btn svg{width:18px;height:18px}
@@ -92,12 +92,23 @@
   .readout{position:absolute;z-index:3;background:#fff;border-radius:14px;padding:12px 14px;font-size:12.5px;color:var(--navy);font-weight:500;box-shadow:0 22px 40px -18px rgba(0,0,0,.55);white-space:nowrap;font-variant-numeric:tabular-nums;transition:transform .6s var(--ease)}
   .readout .lbl{color:var(--ink-2);font-size:10.5px;letter-spacing:.12em;display:block;margin-bottom:6px}
   .readout .row{display:flex;justify-content:space-between;gap:16px}
-  .readout.r1{left:-150px;top:80px}
+  .readout.r1{left:-188px;top:80px}   /* 휴대폰과 약 8px 간격 */
   .readout.r2{right:-112px;top:290px;display:flex;gap:6px;padding:8px}
-  .readout.r3{left:-112px;bottom:70px}
+  .readout.r3{left:-135px;bottom:70px}
   .readout .ok{color:var(--blue)}
-  .pill{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:44px;height:38px;border-radius:12px;font-size:10px;line-height:1.1;color:#fff}
-  .pill b{font-size:13px}
+  /* 소개 페이지와 같은 카드 구성(Figma 82:125104 · 69:116319 · 69:116344), 남색 배경 위라 카드는 밝은 색 */
+  .readout.r1,.readout.r3{border-radius:16px;padding:16px 18px;display:grid;line-height:1;box-shadow:0 22px 40px -18px rgba(0,0,0,.55)}
+  .readout.r1{gap:7px;font:700 17px/1 var(--f-body);color:var(--navy)}
+  .readout.r1 .row,.readout.r3 .row{justify-content:flex-start;align-items:center;font-size:inherit;line-height:1}   /* 사이트 CSS가 div를 13px로 고정해서 상속으로 되돌림 */
+  .readout.r1 .row{gap:8px}
+  .readout.r1 .row>span:first-child{width:40px;flex:none}
+  .readout.r2{padding:8px;border-radius:22px}
+  .readout.r3{gap:9px;font:600 16px/1 var(--f-body);color:var(--ink-2)}
+  .readout.r3 .row{gap:6px}
+  .readout.r3 .ck{display:block;width:18px;height:18px;flex:none}
+  .readout.r3 .ok{color:var(--navy);margin-left:-2px}
+  .pill{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:42px;padding:8px 6px;border-radius:16px;font:700 10px/1 var(--f-body);color:rgba(241,241,246,.7);white-space:nowrap;text-align:center}
+  .pill b{font-size:14px;line-height:1;color:#fff;font-weight:700}
   .pill.a{background:var(--amber)}
   .pill.b{background:var(--blue)}
 
@@ -105,7 +116,7 @@
     .wrap{grid-template-columns:1fr;gap:64px;padding-top:calc(var(--head) + 40px);min-height:0}
     .readout.r1{left:-14px;top:40px}.readout.r2{right:-14px;top:auto;bottom:150px}.readout.r3{left:-14px;bottom:24px}
   }
-  @media (max-width:420px){.readout{font-size:11px}}
+  @media (max-width:420px){.readout{font-size:11px}.readout.r1,.readout.r3{font-size:13px;padding:12px 14px;border-radius:12px;gap:5px}.readout.r1 .row>span:first-child{width:32px}.readout.r3 .ck{width:15px;height:15px}}
   /* reticle: crosshair + live coordinates under the pointer (same as the intro page hero) */
   .reticle{position:absolute;pointer-events:none;z-index:1;inset:0;opacity:0;transition:opacity .3s}
   &:hover .reticle{opacity:1}
@@ -129,7 +140,7 @@
 <div class="reticle" aria-hidden="true"><i class="h"></i><i class="v"></i><span class="tag"></span></div>
 <div class="wrap">
   <div>
-    <a class="new ld" style="--d:0" href="/introduce/introduce_01.php"><b>NEW</b>새로운 SmartTopo 신기능 보기 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a class="new ld" style="--d:0" href="/introduce/introduce_01.php"><b>NEW</b>새로운 SmartTopo 기능 보기 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     <img class="logo ld" style="--d:1" src="assets/smarttopo_logo_white.svg" alt="SmartTopo" width="191" height="34">
     <h1>
       <span class="k"><span style="--d:2">실시간 GPS, 토탈 스테이션</span></span>
@@ -146,18 +157,17 @@
       <video src="assets/f3.mp4" poster="assets/s3a.webp" autoplay muted loop playsinline aria-label="SmartTopo 측량 화면 녹화"></video>
     </div></div>
     <div class="readout r1" style="--d:0" data-depth="18" aria-hidden="true">
-      <span class="lbl">RTK · 고정해</span>
       <div class="row"><span>X(N)</span><span data-k="x">549278.428</span></div>
       <div class="row"><span>Y(E)</span><span data-k="y">194656.079</span></div>
       <div class="row"><span>Z(H)</span><span data-k="z">27.063</span></div>
     </div>
     <div class="readout r2" style="--d:1" data-depth="-14" aria-hidden="true">
-      <span class="pill a">IMU<b>OFF</b></span><span class="pill b">GNSS<b data-k="g">16</b></span><span class="pill b">상태<b>고정</b></span>
+      <span class="pill a">IMU<b>OFF</b></span><span class="pill b">GNSS<b data-k="g">16</b></span><span class="pill b">보정<b>양호</b></span><span class="pill b">상태<b>고정</b></span>
     </div>
     <div class="readout r3" style="--d:2" data-depth="10" aria-hidden="true">
-      <span class="lbl">정밀도</span>
-      <div class="row"><span>H</span><span class="ok" data-k="h">0.017</span></div>
-      <div class="row"><span>V</span><span class="ok" data-k="v">0.030</span></div>
+      <div class="row"><img class="ck" src="assets/check_on.svg" alt="" width="18" height="18"><span>PDOP</span><span class="ok">1.7</span></div>
+      <div class="row"><img class="ck" src="assets/check_on.svg" alt="" width="18" height="18"><span>H</span><span class="ok" data-k="h">0.017</span></div>
+      <div class="row"><img class="ck" src="assets/check_on.svg" alt="" width="18" height="18"><span>V</span><span class="ok" data-k="v">0.030</span></div>
     </div>
   </div>
 </div>
