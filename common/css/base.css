@@ -1,0 +1,85 @@
+@charset "utf-8";
+@import url(https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css);
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@1.0/nanumbarungothicsubset.css");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,input,select,textarea,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video{
+	padding:0px;
+	margin:0px;
+	vertical-align:top
+}
+
+
+
+/* default setting */
+* { -webkit-box-sizing: border-box; -moz-box-sizing: border-box;  box-sizing: border-box; line-height:1.4; letter-spacing: -0.02em;}
+html {width:100%;margin:0;padding:0}
+* html * {zoom:1}
+
+body {font-family:'NanumBarunGothic',Dotum, HelveticaNeue,DroidSans,Sans-serif,Helvetica; height:auto; color:#5a5959; letter-spacing:-0.1px; -webkit-text-size-adjust:none;}
+* {font-family:'NanumBarunGothic',Dotum, HelveticaNeue,DroidSans,Sans-serif,Helvetica;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,a,button,form,fieldset,p,blockquote {margin:0;padding:0;border:0;outline:0;font-size:100%;font-size:13px;vertical-align:baseline;background:transparent; *line-height:normal;}
+body {line-height:1;}
+
+a {margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;color: #666666}
+table {border-collapse:collapse;border-spacing:0;}
+ul, ol {list-style:none}
+input, textarea {vertical-align: middle; font-family:'NanumBarunGothic',Dotum, HelveticaNeue,DroidSans,Sans-serif,Helvetica;  background:#fff !important; }
+input[type=text], input[type=password] {padding:5px 5px; border:1px solid #c7c7c7; background:#fff; font-family:'NanumBarunGothic',Dotum, HelveticaNeue,DroidSans,Sans-serif,Helvetica; color:#696969;}
+input[type=text]::-webkit-input-placeholder, input[type=password]::-webkit-input-placeholder {color:#696969;}
+input[type=text]::-webkit-input-placeholder, input[type=password]::-webkit-input-placeholder { color:#696969; }
+input[type=text]::-moz-placeholder, input[type=password]::-moz-placeholder { color:#696969; } /* firefox 19+ */
+input[type=text]:-ms-input-placeholder, input[type=password]:-ms-input-placeholder { color:#696969; } /* ie */
+input[type=text]:-moz-placeholder, input[type=password]:-moz-placeholder { color:#696969; }
+input[type=checkbox] {margin: 0 4px 0 0; vertical-align:middle;}
+input[type=radio] {margin-top:0;vertical-align: middle; margin:0 4px 0 0;}
+input[type=submit], input[type=button] {cursor:pointer;}
+button {border:0;cursor: pointer;width:auto; overflow:visible;}
+select {border:1px solid #ebebeb;}
+textarea {resize:none; border:1px solid #ebebeb;}
+address, em {font-style:normal}
+th, td {padding:0;vertical-align:middle;font-weight:normal}
+a, button, input[type=button], input[type=submit], input[type=reset] {text-decoration:none; *line-height:normal;}
+legend, caption {display: none}
+iframe,object,video,embed{position:relative;top:0;left:0;max-width:100%}
+*+ html body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,a,button,form,fieldset,p,blockquote {vertical-align: top}
+
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	input[type=radio] {vertical-align: top;}
+	label.radio {line-height: 13px}
+}
+@-moz-document url-prefix() {
+	/* input[type=radio] {vertical-align: top} */
+	label.radio {line-height: 13px}
+}
+
+/* inline */
+img {display:inline-block;border:none;vertical-align:top; max-width: 100%;}
+cite, code, dfn, del, em, ins, label, q, span, strong {display:inline-block; *line-height:normal;}
+label {*vertical-align:middle}
+cite, em, dfn {font-style:normal}
+sub {vertical-align:bottom;font-family:helvetica}
+sup {vertical-align:top;font-family:helvetica}
+hr {display:none}
+
+
+/* html5 ie9 else */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+   display:block;
+   padding:0;
+   margin:0
+}
