@@ -37,7 +37,23 @@
 		<script src="../common/js/common.js"></script>
 		<script src="../admin/lib/javascript.js"></script>
 		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-	<style>/* [테스트] 최신 SmartTopo 로고 */
+	<script>/* [테스트] 메인·제품소개 페이지 외 링크 비활성화 (로고·메뉴의 메인/소개 링크, 같은 페이지 안 #이동, 메뉴 열기용 빈 링크만 동작) */
+(function(){
+  var OK=/\/(main\/main|introduce\/introduce_01)\.html$/;
+  function allowed(a){
+    var h=(a.getAttribute('href')||'').trim();
+    if(!h||h.charAt(0)==='#'||/^javascript:\s*(void\(0\);?|;)?\s*$/i.test(h)) return true;
+    if(/^javascript:/i.test(h)) return false;
+    try{var u=new URL(h,location.href)}catch(e){return false}
+    return u.origin===location.origin&&OK.test(u.pathname);
+  }
+  function link(e){return e.target.closest&&e.target.closest('a[href]')}
+  document.addEventListener('click',function(e){var a=link(e);if(a&&!allowed(a)){e.preventDefault();e.stopImmediatePropagation()}},true);
+  document.addEventListener('submit',function(e){e.preventDefault();e.stopImmediatePropagation()},true);
+  document.addEventListener('mouseover',function(e){var a=link(e);if(a&&!allowed(a)){a.style.cursor='default';a.removeAttribute('target')}},true);
+})();
+</script>
+<style>/* [테스트] 최신 SmartTopo 로고 */
 #header h1,#header.header2022 h1{top:45px;left:40px;margin-top:0;transform:translateY(-50%)}   /* 메뉴 글자 중심과 세로 가운데 정렬 */
 #header h1 img{display:block;height:34px;width:auto;max-width:none}
 #footer a img{display:block;height:28px;width:auto;max-width:none}
