@@ -292,6 +292,19 @@
 
 
   /* ---------- motion ---------- */
+  /* 모바일 글자 크기: h1 46 · h2 40 · h3 40 · 키포인트 h3 28 */
+  @media (max-width:768px){
+    .hero h1{font-size:46px}
+    .sec-head h2,.gs .sec-head h2,.closing h2{font-size:40px}
+    .fitem h3,.spec h3{font-size:40px}
+    .kp h3{font-size:28px}
+  }
+  /* 6가지 기능: 한 줄로 쌓이는 화면(태블릿·모바일)에서는 가운데 정렬 */
+  @media (max-width:960px){
+    .fitem{align-items:center;text-align:center}
+    .fitem .no{justify-content:center}
+    .fitem p.desc{margin-inline:auto}
+  }
   @media (prefers-reduced-motion:no-preference){
     .ld{animation:st26-ld 1s var(--ease) both;animation-delay:calc(var(--d,0) * 90ms + 150ms)}
     .hero h1 .k>span{animation:st26-up 1s var(--ease) both;animation-delay:calc(var(--d,0) * 110ms + 100ms)}
