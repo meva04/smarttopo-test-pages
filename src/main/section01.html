@@ -23,6 +23,8 @@
 @keyframes st26m-up{from{transform:translateY(105%)}}
 @keyframes st26m-rise{from{opacity:0;transform:translateY(60px) rotate(4deg) scale(.94)}}
 @keyframes st26m-pop{from{opacity:0;transform:translateY(14px) scale(.9)}}
+@keyframes st26m-tap{from{transform:scale(.35);opacity:1}to{transform:scale(1.9);opacity:0}}
+@keyframes st26m-tapdot{0%{transform:scale(.5);opacity:0}15%{transform:scale(1);opacity:1}65%{transform:scale(.92);opacity:1}100%{transform:scale(.8);opacity:0}}
 /* 사이트의 기존 section01 배경 이미지·고정 높이·여백을 이 블록이 있을 때만 해제 */
 #main.main2022 #section01:has(#st26m){background:none;height:auto;padding:0}
 #st26m#st26m{
@@ -88,6 +90,10 @@
   .phone .foot{flex:none;height:calc(26 * var(--k));background:#fff}
   .phone .media{position:relative;flex:none;width:100%;aspect-ratio:400/766;overflow:hidden;background:#f1f1f6}
   .phone .media>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+  /* 영상 속 버튼을 누르는 순간 터치 효과 (휴대폰 틀 위에 띄움, 목업 밖으로 나가도 됨) */
+  .phone>.tapfx{position:absolute;z-index:6;width:80px;height:80px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
+  .tapfx::before{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(1,154,235,.28);border:3px solid rgba(1,154,235,.9);animation:st26m-tap .75s ease-out forwards}
+  .tapfx::after{content:"";position:absolute;inset:36%;border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 0 0 4px rgba(1,154,235,.9),0 4px 10px rgba(0,48,84,.35);animation:st26m-tapdot .75s ease-out forwards}
   /* live readouts (part of the illustration) */
   .readout{position:absolute;z-index:3;background:#fff;border-radius:14px;padding:12px 14px;font-size:12.5px;color:var(--navy);font-weight:500;box-shadow:0 22px 40px -18px rgba(0,0,0,.55);white-space:nowrap;font-variant-numeric:tabular-nums;transition:transform .6s var(--ease)}
   .readout .lbl{color:var(--ink-2);font-size:10.5px;letter-spacing:.12em;display:block;margin-bottom:6px}
@@ -154,7 +160,7 @@
   </div>
   <div class="stage" id="st26m-stage">
     <div class="phone"><div class="screen">
-      <video src="assets/f3.mp4" poster="assets/s3a.webp" autoplay muted loop playsinline aria-label="SmartTopo 측량 화면 녹화"></video>
+      <video src="assets/hero.mp4" poster="assets/s2a.webp" autoplay muted loop playsinline aria-label="빠른 측설, 사진 측량, 측량 단계 간소화 화면 녹화"></video>
     </div></div>
     <div class="readout r1" style="--d:0" data-depth="18" aria-hidden="true">
       <div class="row"><span>X(N)</span><span data-k="x">549278.428</span></div>
@@ -190,6 +196,20 @@ R.querySelectorAll('.phone .screen').forEach(scr=>{
   scr.insertAdjacentHTML('beforeend','<div class="foot" aria-hidden="true"></div>');
 });
 R.querySelectorAll('video[autoplay]').forEach(v=>{v.muted=true;v.play().catch(()=>{})});
+
+/* 터치 효과: 빠른 측설(0s) → 사진 측량(6.57s) → 측량 단계 간소화(32.4s) 이어 붙인 영상에서 버튼을 누르는 순간 [초, 가로%, 세로%] */
+const TAPS=[[6.82,84,92],[15.4,42.5,26],[18.48,40,25.8],[19.57,65.7,28],[24.41,38,25.3],[28.98,88.7,24.8],[30.26,67.5,95],[33.37,85,83.4]];
+function tapAt(v,x,y){const ph=v.closest('.phone');if(!ph)return;const a=v.getBoundingClientRect(),b=ph.getBoundingClientRect(),k=ph.offsetWidth/b.width||1;
+  const d=document.createElement('span');d.className='tapfx';d.style.left=((a.left-b.left)+a.width*x/100)*k+'px';d.style.top=((a.top-b.top)+a.width*766/400*y/100)*k+'px';ph.appendChild(d);setTimeout(()=>d.remove(),800)}
+if(!RM) R.querySelectorAll('.stage video').forEach(v=>{
+  let last=0,run=false;
+  const tick=()=>{if(v.paused||v.ended){run=false;return}
+    const ct=v.currentTime;if(ct<last)last=-1;   // 반복 재생으로 처음으로 돌아감
+    TAPS.forEach(([t,x,y])=>{if(t>last&&t<=ct&&ct-t<.4)tapAt(v,x,y)});
+    last=ct;requestAnimationFrame(tick)};
+  const go=()=>{if(!run){last=v.currentTime;run=true;requestAnimationFrame(tick)}};
+  v.addEventListener('playing',go);if(!v.paused)go();
+});
 
 /* live readout */
 const K=k=>R.querySelector(`[data-k="${k}"]`),base={x:549278.428,y:194656.079,z:27.063};

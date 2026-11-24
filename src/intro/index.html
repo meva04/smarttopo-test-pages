@@ -30,6 +30,8 @@
 @keyframes st26-in{from{opacity:0;transform:translateX(28%) scale(.94);filter:brightness(1.25)}to{opacity:1;transform:none;filter:none}}
 @keyframes st26-out{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-18%) scale(.94)}}
 @keyframes st26-blink{0%{opacity:0}25%{opacity:.55}100%{opacity:0}}
+@keyframes st26-tap{from{transform:scale(.35);opacity:1}to{transform:scale(1.9);opacity:0}}
+@keyframes st26-tapdot{0%{transform:scale(.5);opacity:0}15%{transform:scale(1);opacity:1}65%{transform:scale(.92);opacity:1}100%{transform:scale(.8);opacity:0}}
 /* 사이트(stopo.co.kr 제품소개) 안에 들어갔을 때: 서브 탭 바로 아래에서 히어로가 시작되도록 콘텐츠 영역 상단 여백 제거.
    이 블록이 있는 페이지에서만 적용됩니다. */
 #contents .subCont:has(#st26){padding-top:0}
@@ -140,7 +142,7 @@
   .phone .sbar{flex:none;height:calc(38 * var(--k));display:flex;align-items:flex-end;justify-content:space-between;padding:0 calc(18 * var(--k)) calc(7 * var(--k));background:var(--navy);color:#fff;font:600 calc(13 * var(--k))/1 var(--f-body);letter-spacing:.01em;font-variant-numeric:tabular-nums}
   .phone .sbar .ic{display:flex;align-items:center;gap:calc(5 * var(--k))}
   .phone .sbar svg{display:block;height:calc(13 * var(--k));width:auto;fill:#fff}
-  .phone .foot{flex:none;height:calc(26 * var(--k));background:#fff}
+  .phone .foot{flex:none;height:calc(26 * var(--k));background:var(--foot,#f0f1f4)}   /* 하단 띠 색은 화면(영상)마다 다름: 기능 데이터의 fc 값을 --foot 으로 넣음 */
   /* white strip under the app's bottom menu (no home indicator) */
   .phone .sbar .bt{font-size:calc(11.5 * var(--k));margin-left:calc(1 * var(--k))}
   .phone .media{position:relative;flex:none;width:100%;aspect-ratio:400/766;overflow:hidden;background:var(--bg)}
@@ -151,21 +153,29 @@
   .sec-head{display:grid;gap:8px;max-width:720px;margin-bottom:56px}
   .sec-head h2{font-size:clamp(36px,4vw,64px);font-weight:800;margin-bottom:0}
   .sec-head p{color:var(--amber);}
-  .features{background:var(--surface);padding-bottom:0;overflow-x:clip}
+  .features{background:var(--surface);padding-bottom:0}
   .fgrid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:80px;position:relative;z-index:0}
   /* 기능 6개를 각각 화면 가로 전체 띠로: 섹션 제목+1·3·5 흰색(제목과 1번은 한 덩어리), 2·4·6 그레이 */
   .fitem{position:relative}
-  .fitem::before{content:"";position:absolute;inset:0 -100vmax;background:#fbfbfd;z-index:-1}   /* 2·4·6: 기본 그레이(#f1f1f6)보다 훨씬 연하게 */
-  .fitem:nth-child(odd)::before{background:var(--surface)}
+  .fitem::before{content:"";position:absolute;inset:0;background:#fbfbfd;box-shadow:0 0 0 100vmax #fbfbfd;clip-path:inset(0 -100vmax);z-index:-1}   /* 가로 전체 띠: 넓은 박스 대신 그림자로 늘려서 가로 스크롤·잘라내기(overflow clip) 없이 그림 → 사파리 고정 목업 흔들림 방지 */   /* 2·4·6: 기본 그레이(#f1f1f6)보다 훨씬 연하게 */
+  .fitem:nth-child(odd)::before{background:var(--surface);box-shadow:0 0 0 100vmax var(--surface)}
   .fgrid>.flist{padding-right:16px}
   .stage{position:sticky;top:70px;height:calc(100vh - 140px);max-height:820px;display:flex;align-items:center;justify-content:center;gap:24px}
   .stage .phone{width:min(310px,calc((100vh - 230px) * .47));flex:none}
   /* 목업 화면 전환: 비슷한 화면끼리도 바뀐 게 보이도록 새 화면은 오른쪽에서 밀려 들어오고, 이전 화면은 왼쪽으로 빠지며 흐려짐 + 화면 위 살짝 번쩍임 */
   .stage .media>video,.stage .media>img{opacity:0}
+  /* 하단 흰 띠(.foot)도 화면과 한 장처럼 같이 전환: 목업(스테이지)에서는 .foot 대신 각 영상·사진 아래에 같은 띠를 붙임 */
+  .stage .phone .foot{display:none}
+  .stage .phone .media{aspect-ratio:330/657.95}
+  .stage .media>video,.stage .media>img{box-sizing:content-box;bottom:auto;height:auto;aspect-ratio:400/766;border-bottom:calc(26 * var(--k)) solid var(--foot,#f0f1f4)}
   .stage .media>.on{opacity:1;z-index:2;animation:st26-in .7s var(--ease) both}
   .stage .media>.was{z-index:1;animation:st26-out .7s var(--ease) both}
   .stage .media::after{content:"";position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none}
   .stage .media.swap::after{animation:st26-blink .5s ease-out}
+  /* 영상 속 하단 메뉴 터치를 또렷하게: 녹화된 터치 시점에 맞춰 영상 위에 터치 효과(퍼지는 링 + 눌리는 점) */
+  .phone>.tapfx{position:absolute;z-index:6;width:80px;height:80px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}   /* 휴대폰 틀 위에 띄움: 영상 영역·하단(.foot)에 잘리지 않고 목업 밖으로 나가도 됨 */
+  .tapfx::before{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(1,154,235,.28);border:3px solid rgba(1,154,235,.9);animation:st26-tap .75s ease-out forwards}
+  .tapfx::after{content:"";position:absolute;inset:36%;border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 0 0 4px rgba(1,154,235,.9),0 4px 10px rgba(0,48,84,.35);animation:st26-tapdot .75s ease-out forwards}
   .rail{display:flex;flex-direction:column;align-items:center;gap:14px;font-family:var(--f-mono);font-size:18px;color:var(--ink-2)}
   .rail i{position:relative;display:block;width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .3s,transform .4s var(--ease)}
   .rail i.on{background:var(--blue);transform:scale(1)}
@@ -208,6 +218,7 @@
   .utile{position:relative;aspect-ratio:4/5;border-radius:28px;overflow:hidden;background:#ffffff;isolation:isolate}
   .utile .phone{position:absolute;transition:transform .9s var(--ease)}
   .utile .phone{transform-origin:50% 50%}
+  .utile .phone.nofoot .foot{display:none}   /* 화면 이미지 아래 하단 띠 없이, 목업 아래 끝을 이미지 끝에 맞춤 */
   .uitem:hover .utile .phone{transform:scale(1.03)}
   .uitem figcaption{font-size:18px;line-height:1.55;color:var(--ink-2);padding-inline:6px;max-width:30em; font-weight:500}
   .uitem figcaption b{color:var(--ink);font-weight:800}
@@ -294,6 +305,7 @@
     .closing img.sym{animation:none}
     .stage .media>*,.utile .media>img{transition:none}
     .stage .media>*,.stage .media.swap::after{animation:none}
+    .tapfx{display:none}
   }
 }
 </style>
@@ -315,8 +327,8 @@
       </div>
     </div>
     <div class="hero-stage" id="heroStage">
-      <div class="phone"><div class="screen">
-        <video src="assets/f2.mp4" poster="assets/s2a.webp" autoplay muted loop playsinline aria-label="빠른 측설 화면 녹화"></video>
+      <div class="phone" style="--foot:#fbfefb"><div class="screen">
+        <video src="assets/hero.mp4" poster="assets/s2a.webp" autoplay muted loop playsinline aria-label="빠른 측설, 사진 측량, 측량 단계 간소화 화면 녹화"></video>
       </div></div>
       <div class="readout r1" style="--d:0" data-depth="18">
         <div class="row"><span>X(N)</span><span id="cx">549278.428</span></div>
@@ -470,22 +482,21 @@ R.querySelectorAll('video[autoplay]').forEach(v=>v.play().catch(()=>{}));
 /* ---------- data ---------- */
 const F=[
  {id:'f1',t:'더 편리해진 메뉴 접근성',s:'하단 탭 메뉴로 원하는 기능에 바로',d:'메뉴를 화면 하단 탭으로 바꿔 원하는 기능에 훨씬 빨리 닿습니다. 전체 메뉴 → 서브 메뉴 → 기능으로 들어가던 과정이 하단 탭 → 기능으로 줄어, 메뉴 진입 단계가 최소화되고 작업 속도가 빨라집니다.',v:'f1',im:['s1a','s1b'],alt:['작업 탭 화면','측량 탭 화면']},
- {id:'f2',t:'빠른 측설',s:'지도에서 스냅으로 선택하면 바로 측설',d:'지도 위 측설점을 스냅으로 선택하면 곧바로 측설이 시작됩니다. 측설점을 따로 등록하는 과정 없이 지도에서 바로 작업해 측설 속도가 한층 빨라집니다.',v:'f2',im:['s2a','s2b'],alt:['지도에서 측설점 스냅 선택','선택 즉시 측설 시작']},
- {id:'f3',t:'측량 단계 간소화',s:'측량 화면에서 설정 후 바로 측량',d:'측량 전 설정 단계를 줄여 지도 화면에서 바로 측량할 수 있습니다. 일반측량 → 측량 준비 화면 → 측량 시작이던 흐름이 일반측량 → 측량 시작으로 바뀌었습니다.',v:'f3',im:['s3a','s3b'],alt:['지도 화면에서 측량','측량 진행 화면']},
- {id:'f4',t:'사진 측량',s:'폴대를 세울 수 없는 위치도 사진으로',d:'건물 모서리 등 폴대를 세울 수 없어 측량하기 어려운 위치도 측량할 수 있습니다. 해당 위치를 사진으로 촬영한 뒤, 사진에서 원하는 지점을 선택하면 좌표가 추출됩니다.',v:'f4',im:['s4a','s4b'],alt:['여러 각도에서 자동 촬영','사진에서 지점 선택 후 좌표 추출']},
- {id:'f5',t:'사진으로 좌표 입력',s:'포인트점·측설점·도로 IP 좌표를 찍어서 추가',d:'측설점이나 도로 IP점의 좌표를 직접 타이핑하지 않아도 됩니다. 자료를 카메라로 찍거나 앨범에서 불러오면 사진 속 좌표를 자동으로 읽어 바로 추가합니다.',v:'f5',im:['s5a','s5b'],alt:['좌표 영역을 드래그해 인식','인식된 좌표 목록']},
- {id:'f6',t:'기준점측량 지원',s:'공공측량 작업규정에 맞춘 측량부터 보고서까지',d:'공공측량 작업규정에 맞춰 설정되어 있어, 기준점측량부터 공공측량 형식의 보고서 출력까지 한 번에 끝낼 수 있습니다.',v:'f6',im:['s6a'],alt:['기준점측량 진행 화면'],report:true}
+ {id:'f2',fc:'#fbfefb',t:'빠른 측설',s:'지도에서 스냅으로 선택하면 바로 측설',d:'지도 위 측설점을 스냅으로 선택하면 곧바로 측설이 시작됩니다. 측설점을 따로 등록하는 과정 없이 지도에서 바로 작업해 측설 속도가 한층 빨라집니다.',v:'f2',im:['s2a','s2b'],alt:['지도에서 측설점 스냅 선택','선택 즉시 측설 시작']},
+ {id:'f3',fc:'#fbfefb',t:'측량 단계 간소화',s:'측량 화면에서 설정 후 바로 측량',d:'측량 전 설정 단계를 줄여 지도 화면에서 바로 측량할 수 있습니다. 일반측량 → 측량 준비 화면 → 측량 시작이던 흐름이 일반측량 → 측량 시작으로 바뀌었습니다.',v:'f3',im:['s3a','s3b'],alt:['지도 화면에서 측량','측량 진행 화면']},
+ {id:'f4',fc:'#fbfefb',t:'사진 측량',s:'폴대를 세울 수 없는 위치도 사진으로',d:'건물 모서리 등 폴대를 세울 수 없어 측량하기 어려운 위치도 측량할 수 있습니다. 해당 위치를 사진으로 촬영한 뒤, 사진에서 원하는 지점을 선택하면 좌표가 추출됩니다.',v:'f4',im:['s4a','s4b'],alt:['여러 각도에서 자동 촬영','사진에서 지점 선택 후 좌표 추출']},
+ {id:'f5',fc:'#fbfefb',t:'사진으로 좌표 입력',s:'포인트점·측설점·도로 IP 좌표를 찍어서 추가',d:'측설점이나 도로 IP점의 좌표를 직접 타이핑하지 않아도 됩니다. 자료를 카메라로 찍거나 앨범에서 불러오면 사진 속 좌표를 자동으로 읽어 바로 추가합니다.',v:'f5',im:['s5a','s5b'],alt:['좌표 영역을 드래그해 인식','인식된 좌표 목록']},
+ {id:'f6',fc:'#fbfefb',t:'기준점측량 지원',s:'공공측량 작업규정에 맞춘 측량부터 보고서까지',d:'공공측량 작업규정에 맞춰 설정되어 있어, 기준점측량부터 공공측량 형식의 보고서 출력까지 한 번에 끝낼 수 있습니다.',v:'f6',im:['s6a'],alt:['기준점측량 진행 화면'],report:true}
 ];
 const U=[
- {k:'Stakeout nav',t:'측설 네비게이션 바',d:'현재 위치에서 측설점까지 가야 할 방향을 화면에 보여줍니다. 측설점에 가까워지면 안내 화면이 눈에 띄게 바뀌어 목표 지점을 쉽게 찾을 수 있습니다.',im:'nav1m',seq:[['nav1m','반경 1m'],['nav30','반경 30cm'],['nav10','반경 10cm']],crop:'full'},
- {k:'Stakeout',t:'측설 추가 간소화',d:'측설 화면에서 측설점을 바로 추가할 수 있습니다.',im:'u_addlist',crop:'full'},
+ {k:'Stakeout nav',t:'측설 네비게이션 바',d:'현재 위치에서 측설점까지 가야 할 방향을 화면에 보여줍니다. 측설점에 가까워지면 안내 화면이 눈에 띄게 바뀌어 목표 지점을 쉽게 찾을 수 있습니다.',im:'nav1m',seq:[['nav1m','반경 1m'],['nav30','반경 30cm'],['nav10','반경 10cm']],crop:'full',nofoot:true},
+ {k:'Stakeout',t:'측설 추가 간소화',d:'측설 화면에서 측설점을 바로 추가할 수 있습니다.',im:'u_addlist',crop:'full',nofoot:true},
  {k:'RTK',t:'RTK 설정 불러오기',d:'최근 설정값이 자동으로 저장돼 다시 입력하지 않아도 RTK를 바로 실행합니다. 이전 설정값도 저장되어 필요할 때 골라 바꿀 수 있습니다.',im:'u_rtk',crop:'top'},
- {k:'Drawing',t:'선끼리 병합',d:'도면에서 서로 떨어져 있는 선을 하나로 합칩니다. 두 개로 나뉜 선도 한 번에 이어서 측설할 수 있습니다.',im:'u_merge',crop:'bottom'},
+ {k:'Drawing',t:'선끼리 병합',d:'도면에서 서로 떨어져 있는 선을 하나로 합칩니다. 두 개로 나뉜 선도 한 번에 이어서 측설할 수 있습니다.',im:'u_merge',crop:'bottom',fc:'#fbfefb'},
  {k:'Weather',t:'현장 날씨 안내',d:'현재 위치의 기상청 날씨와 2시간 후 예보를 표시합니다.',im:'u_weather',crop:'zoom',cx:.646,right:.99,fy:.44},
- {k:'Import',t:'DXF 포인트 가져오기',d:'포인트 매니저에서 DXF 도면 파일의 포인트를 바로 불러옵니다.',im:'u_dxf',crop:'bottom'},
- {k:'Export',t:'CSV 내보내기',d:'포인트 매니저의 포인트 목록을 파일명을 지정해 CSV로 내보냅니다.',im:'u_csv',crop:'bottom'},
- {k:'Restore',t:'삭제 포인트 복구',d:'실수로 지운 포인트를 삭제 포인트 목록에서 골라 되살립니다.',im:'u_restore',crop:'bottom'},
- {k:'Snap',t:'스냅 기능 확대',d:'측설 화면에서도 지도 위 점을 스냅으로 집어 바로 작업할 수 있습니다.',im:'u_snap',crop:'full'}
+ {k:'Import',t:'DXF 포인트 가져오기',d:'포인트 매니저에서 DXF 도면 파일의 포인트를 바로 불러옵니다.',im:'u_dxf',crop:'bottom',fc:'#fbfefb'},
+ {k:'Export',t:'CSV 내보내기',d:'포인트 매니저의 포인트 목록을 파일명을 지정해 CSV로 내보냅니다.',im:'u_csv',crop:'bottom',fc:'#fbfefb'},
+ {k:'Snap',t:'스냅 기능 확대',d:'측설 화면에서도 지도 위 점을 스냅으로 집어 바로 작업할 수 있습니다.',im:'u_snap',crop:'full',nofoot:true}
 ];
 
 /* ---------- build features ---------- */
@@ -499,10 +510,10 @@ F.forEach((f,i)=>{
     ${f.im.map((m,j)=>`<button type="button" class="thumb" id="t${i}-${j}" data-f="${i}" data-src="assets/${m}.webp" aria-pressed="false" aria-label="${f.alt[j]}"><img src="assets/${m}.webp" alt="" loading="lazy"></button>`).join('')}
   </div>
   ${f.report?`<figure class="report" style="margin:0"><figcaption>[ 출력 보고서 양식 ]</figcaption><img src="assets/report.webp" alt="공공측량 형식의 기준점측량 출력 보고서" loading="lazy"></figure>`:''}
-  <div class="m-phone"><div class="phone"><div class="screen"><video data-src="assets/${f.v}.mp4" poster="assets/${f.im[0]}.webp" muted loop playsinline preload="none" aria-label="${f.t} 화면 녹화"></video></div></div></div>`;
+  <div class="m-phone"><div class="phone"${f.fc?` style="--foot:${f.fc}"`:''}><div class="screen"><video data-src="assets/${f.v}.mp4" poster="assets/${f.im[0]}.webp" muted loop playsinline preload="none" aria-label="${f.t} 화면 녹화"></video></div></div></div>`;
   list.appendChild(a);
   const v=document.createElement('video');Object.assign(v,{muted:true,loop:true,playsInline:true,preload:'none'});
-  v.setAttribute('muted','');v.setAttribute('playsinline','');v.dataset.src=`assets/${f.v}.mp4`;v.poster=`assets/${f.im[0]}.webp`;v.setAttribute('aria-label',f.t+' 화면 녹화');
+  v.setAttribute('muted','');v.setAttribute('playsinline','');v.dataset.src=`assets/${f.v}.mp4`;v.poster=`assets/${f.im[0]}.webp`;v.setAttribute('aria-label',f.t+' 화면 녹화');if(f.fc)v.style.setProperty('--foot',f.fc);
   scr.appendChild(v);
   const t=document.createElement('i');t.innerHTML=`<span>${f.t}</span>`;rail.appendChild(t);
 });
@@ -524,12 +535,31 @@ list.addEventListener('click',e=>{
   const b=e.target.closest('.thumb');if(!b)return;
   const i=+b.dataset.f;setActive(i);
   b.parentElement.querySelectorAll('.thumb').forEach(x=>x.setAttribute('aria-pressed',x===b));
-  if(b.classList.contains('vid')){vidOn(i)}else{if(layer&&layer.tagName==='IMG'&&layer.getAttribute('src')===b.dataset.src)return;const still=stills[0]===layer?stills[1]:stills[0];still.src=b.dataset.src;still.alt=b.getAttribute('aria-label');vids[i].pause();show(still)}
+  if(b.classList.contains('vid')){vidOn(i)}else{if(layer&&layer.tagName==='IMG'&&layer.getAttribute('src')===b.dataset.src)return;const still=stills[0]===layer?stills[1]:stills[0];still.src=b.dataset.src;still.alt=b.getAttribute('aria-label');still.style.setProperty('--foot',F[i].fc||'#f0f1f4');vids[i].pause();show(still)}
 });
 const desk=matchMedia('(min-width: 961px)');
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&desk.matches)setActive(+e.target.dataset.i)})},{rootMargin:'-45% 0px -45% 0px'});
 list.querySelectorAll('.fitem').forEach(a=>io.observe(a));
 if(desk.matches) setActive(0);
+/* 영상 위 터치 효과: 영상별 터치 시점(초)과 위치(영상 가로·세로 %) — f1 하단 탭(측량·측설·도구·설정) 터치를 녹화 영상에서 읽어 맞춤 */
+const TAPS={hero:[[6.82,84,92],[15.4,42.5,26],[18.48,40,25.8],[19.57,65.7,28],[24.41,38,25.3],[28.98,88.7,24.8],[30.26,67.5,95],[33.37,85,83.4]],   /* 상단 목업: 빠른 측설(0s) → 사진 측량(6.57s) → 측량 단계 간소화(32.4s) 이어 붙인 영상 */
+  f3:[[0.97,85,83.4]],   /* 측량 단계 간소화: 화면을 1초 보여준 뒤 '측량하기' 버튼 */
+  f4:[[0.25,84,92],[8.83,42.5,26],[11.91,40,25.8],[13.0,65.7,28],[17.84,38,25.3],[22.41,88.7,24.8],[23.69,67.5,95]],   /* 사진 측량: 촬영하기 → 사진 썸네일 선택 → 저장 */
+  f5:[[2.93,50,80.3],[4.0,58,89.5],[5.04,60,88],[7.9,72.5,96.3],[11.5,75,95.3],[13.88,13,21.5],[19.7,72.5,17.8],[21.4,80,23.5],[22.85,80,95.8],[27.62,35,95.8]],   /* 사진으로 좌표 입력: 측설목록 → 가져오기 → 사진 → 확인 → 촬영 → 영역 드래그 → 행 선택 → 가져오기 → 취소 */
+  f6:[[1.07,86.5,94.9],[3.49,41,87],[5.53,67.8,96.3]],   /* 기준점측량: 측량하기 → 자동설정 후 측량 → 적용 */
+  f1:[[0.03,10.5,96.6],[1.02,32.3,96.9],[2.49,56.3,96.3],[4.07,71.3,95.8],[5.49,89.8,95.6]]};
+function tapAt(v,x,y){const ph=v.closest('.phone');if(!ph)return;const a=v.getBoundingClientRect(),b=ph.getBoundingClientRect(),k=ph.offsetWidth/b.width||1;
+  const d=document.createElement('span');d.className='tapfx';d.style.left=((a.left-b.left)+a.width*x/100)*k+'px';d.style.top=((a.top-b.top)+a.width*766/400*y/100)*k+'px';ph.appendChild(d);setTimeout(()=>d.remove(),800)}
+if(!RM) R.querySelectorAll('video').forEach(v=>{
+  const key=(v.dataset.src||v.getAttribute('src')||'').replace(/^.*\/|\.mp4$/g,''),T=TAPS[key];if(!T)return;
+  let last=0,run=false;
+  const tick=()=>{if(v.paused||v.ended){run=false;return}
+    const ct=v.currentTime;if(ct<last)last=-1;                         // 반복 재생으로 처음으로 돌아감
+    T.forEach(([t,x,y])=>{if(t>last&&t<=ct&&ct-t<.4)tapAt(v,x,y)});
+    last=ct;requestAnimationFrame(tick)};
+  v.addEventListener('playing',()=>{last=v.currentTime;if(!run){run=true;requestAnimationFrame(tick)}});
+  if(!v.paused&&!run){last=v.currentTime;run=true;requestAnimationFrame(tick)}   // 상단 목업처럼 이미 재생 중인 영상
+});
 /* mobile inline videos */
 const mio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting){if(!v.src)v.src=v.dataset.src;if(!RM)v.play().catch(()=>{})}else v.pause()}),{threshold:.35});
 list.querySelectorAll('.m-phone video').forEach(v=>mio.observe(v));
@@ -539,7 +569,7 @@ const car=$('#ucar');
 U.forEach(u=>{const f=document.createElement('figure');f.className='uitem';
   const ims=u.seq?u.seq.map(([m,l],j)=>`<img${j?' class="off"':''} src="assets/${m}.webp" alt="${u.t}, ${l}" loading="lazy" width="540" height="1033">`).join('')
     :`<img src="assets/${u.im}.webp" alt="${u.t} 화면" loading="lazy" width="540" height="1033">`;
-  f.innerHTML=`<div class="utile">${u.seq?`<span class="tag" aria-hidden="true">${u.seq[0][1]}</span>`:''}<div class="phone"><div class="screen">${ims}</div></div></div><figcaption><b>${u.t}.</b> ${u.d}</figcaption>`;
+  f.innerHTML=`<div class="utile">${u.seq?`<span class="tag" aria-hidden="true">${u.seq[0][1]}</span>`:''}<div class="phone${u.nofoot?' nofoot':''}"${u.fc?` style="--foot:${u.fc}"`:''}><div class="screen">${ims}</div></div></div><figcaption><b>${u.t}.</b> ${u.d}</figcaption>`;
   f._u=u;car.appendChild(f)});
 car.querySelectorAll('.screen').forEach(dev);
 /* phone is centred with roomy side margins; only the top and/or bottom is cropped:
@@ -549,8 +579,8 @@ function placeTiles(){car.querySelectorAll('.uitem').forEach(f=>{const u=f._u,t=
   let pw=W*.775;
   /* zoom: right edge pinned at u.right·W; width chosen so screen point u.cx lands at the card centre */
   if(u.crop==='zoom')pw=(u.right-.5)*W/(1-10/330-u.cx*(1-20/330));
-  const K=1/330,chromeH=p=>p*84*K,mediaH=p=>p*(1-20*K)*766/400;   /* bezel + status bar scale with the phone */
-  if(u.crop==='full')pw=Math.min(pw,(H-2*m)/((1-20*K)*766/400+84*K));   /* full: whole phone fits in the tile */
+  const K=1/330,CH=u.nofoot?58:84,chromeH=p=>p*CH*K,mediaH=p=>p*(1-20*K)*766/400;   /* bezel + status bar scale with the phone */
+  if(u.crop==='full')pw=Math.min(pw,(H-2*m)/((1-20*K)*766/400+CH*K));   /* full: whole phone fits in the tile */
   const mh=mediaH(pw),phH=mh+chromeH(pw),pad=pw*10*K,head=pw*48*K;
   let top;
   if(u.crop==='full') top=(H-phH)/2;
