@@ -468,11 +468,14 @@ const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const R=document.getElementById('st26'),$=s=>R.querySelector(s);
 
 /* ---------- device chrome: Android status bar + media area + gesture bar ---------- */
-const SB='<div class="sbar" aria-hidden="true"><span>10:12</span><span class="ic">'+
+/* 목업 상태바 시간: 보는 사람의 현재 시각(안드로이드처럼 24시간, 예 9:05·15:30), 10초마다 갱신 */
+const hm=()=>{const d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')};
+setInterval(()=>{const t=hm();R.querySelectorAll('.sbar .tm').forEach(e=>{if(e.textContent!==t)e.textContent=t})},10000);
+const SB='<div class="sbar" aria-hidden="true"><span class="tm">'+hm()+'</span><span class="ic">'+
  '<svg viewBox="0 0 18 14"><path d="M9 13.5 0 4.2A13 13 0 0 1 18 4.2z" opacity=".95"/></svg>'+
  '<svg viewBox="0 0 16 14"><path d="M0 14h3v-3H0zm4.3 0h3V8h-3zm4.4 0h3V4.5h-3zM13 14h3V0h-3z"/></svg>'+
- '<svg viewBox="0 0 27 14"><rect x=".75" y=".75" width="22.5" height="12.5" rx="3.5" fill="none" stroke="#fff" stroke-width="1.5" opacity=".6"/><rect x="2.6" y="2.6" width="16" height="8.8" rx="2"/><path d="M24.8 4.8h.8a1.2 1.2 0 0 1 1.2 1.2v2a1.2 1.2 0 0 1-1.2 1.2h-.8z" opacity=".6"/></svg>'+
- '<span class="bt">78</span></span></div>';
+ '<svg viewBox="0 0 27 14"><rect x=".75" y=".75" width="22.5" height="12.5" rx="3.5" fill="none" stroke="#fff" stroke-width="1.5" opacity=".6"/><rect x="2.6" y="2.6" width="17.9" height="8.8" rx="2"/><path d="M24.8 4.8h.8a1.2 1.2 0 0 1 1.2 1.2v2a1.2 1.2 0 0 1-1.2 1.2h-.8z" opacity=".6"/></svg>'+
+ '<span class="bt">94</span></span></div>';
 function dev(scr){if(scr.querySelector('.media'))return;const m=document.createElement('div');m.className='media';
   const ph=scr.parentElement;if(ph&&ph.classList.contains('phone')){const sh=document.createElement('div');sh.className='shell';ph.insertBefore(sh,scr);sh.appendChild(scr);}
   while(scr.firstChild)m.appendChild(scr.firstChild);scr.insertAdjacentHTML('afterbegin',SB);scr.appendChild(m);
@@ -491,15 +494,15 @@ const F=[
  {id:'f6',fc:'#fbfefb',t:'기준점측량 지원',s:'공공측량 작업규정에 맞춘 측량부터 보고서까지',d:'공공측량 작업규정에 맞춰 설정되어 있어, 기준점측량부터 공공측량 형식의 보고서 출력까지 한 번에 끝낼 수 있습니다.',v:'f6',im:['s6a'],alt:['기준점측량 진행 화면'],report:true}
 ];
 const U=[
- {k:'Stakeout nav',t:'측설 네비게이션 바',d:'현재 위치에서 측설점까지 가야 할 방향을 화면에 보여줍니다. 측설점에 가까워지면 안내 화면이 눈에 띄게 바뀌어 목표 지점을 쉽게 찾을 수 있습니다.',im:'nav1m',seq:[['nav1m','반경 1m'],['nav30','반경 30cm'],['nav10','반경 10cm']],crop:'full',nofoot:true},
+ {k:'Snap',t:'스냅 기능 확대',d:'측량 및 측설 화면에서 지도상의 위치를 스냅 기능으로 쉽게 선택하고, 즉시 작업을 수행할 수 있습니다.',im:'u_snap',crop:'full',nofoot:true},
  {k:'Stakeout',t:'측설 추가 간소화',d:'측설 화면에서 측설점을 바로 추가할 수 있습니다.',im:'u_addlist',crop:'full',nofoot:true},
+ {k:'Stakeout nav',t:'측설 네비게이션 바',d:'현재 위치에서 측설점까지 가야 할 방향을 화면에 보여줍니다. 측설점에 가까워지면 안내 화면이 눈에 띄게 바뀌어 목표 지점을 쉽게 찾을 수 있습니다.',im:'nav1m',seq:[['nav1m','반경 1m'],['nav30','반경 30cm'],['nav10','반경 10cm']],crop:'full',nofoot:true},
+ {k:'VRS',t:'VRS 서버 설정 및 연결 편의성 강화',d:'여러 VRS 서버 정보를 사전에 등록하고 목록으로 관리할 수 있습니다. VRS 연결 시 별도의 정보 입력 없이 등록된 서버를 선택하여 빠르고 간편하게 연결할 수 있어, 현장에서 보다 효율적인 측량 작업이 가능합니다.',im:'u_vrs',crop:'top'},
  {k:'RTK',t:'RTK 설정 불러오기',d:'최근 설정값이 자동으로 저장돼 다시 입력하지 않아도 RTK를 바로 실행합니다. 이전 설정값도 저장되어 필요할 때 골라 바꿀 수 있습니다.',im:'u_rtk',crop:'top'},
  {k:'Drawing',t:'선끼리 병합',d:'도면에서 서로 떨어져 있는 선을 하나로 합칩니다. 두 개로 나뉜 선도 한 번에 이어서 측설할 수 있습니다.',im:'u_merge',crop:'bottom',fc:'#fbfefb'},
- {k:'Weather',t:'현장 날씨 안내',d:'현재 위치의 기상청 날씨와 2시간 후 예보를 표시합니다.',im:'u_weather',crop:'zoom',cx:.646,right:.99,fy:.44},
- {k:'VRS',t:'VRS 서버 설정 및 연결 편의성 강화',d:'여러 VRS 서버 정보를 사전에 등록하고 목록으로 관리할 수 있습니다. VRS 연결 시 별도의 정보 입력 없이 등록된 서버를 선택하여 빠르고 간편하게 연결할 수 있어, 현장에서 보다 효율적인 측량 작업이 가능합니다.',im:'u_vrs',crop:'top'},
  {k:'Import',t:'DXF 포인트 가져오기',d:'포인트 매니저에서 DXF 도면 파일의 포인트를 바로 불러옵니다.',im:'u_dxf',crop:'bottom',fc:'#fbfefb'},
  {k:'Export',t:'CSV 내보내기',d:'포인트 매니저의 포인트 목록을 파일명을 지정해 CSV로 내보냅니다.',im:'u_csv',crop:'bottom',fc:'#fbfefb'},
- {k:'Snap',t:'스냅 기능 확대',d:'측량 및 측설 화면에서 지도상의 위치를 스냅 기능으로 쉽게 선택하고, 즉시 작업을 수행할 수 있습니다.',im:'u_snap',crop:'full',nofoot:true}
+ {k:'Weather',t:'현장 날씨 안내',d:'현재 위치의 기상청 날씨와 2시간 후 예보를 표시합니다.',im:'u_weather',crop:'zoom',cx:.646,right:.99,fy:.44}
 ];
 
 /* ---------- build features ---------- */

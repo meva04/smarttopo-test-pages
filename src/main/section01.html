@@ -184,11 +184,14 @@ const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const R=document.getElementById('st26m'),$=s=>R.querySelector(s);
 
 /* device chrome: Android status bar + media area + bottom strip */
-const SB='<div class="sbar" aria-hidden="true"><span>10:12</span><span class="ic">'+
+/* 목업 상태바 시간: 보는 사람의 현재 시각(안드로이드처럼 24시간, 예 9:05·15:30), 10초마다 갱신 */
+const hm=()=>{const d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')};
+setInterval(()=>{const t=hm();R.querySelectorAll('.sbar .tm').forEach(e=>{if(e.textContent!==t)e.textContent=t})},10000);
+const SB='<div class="sbar" aria-hidden="true"><span class="tm">'+hm()+'</span><span class="ic">'+
  '<svg viewBox="0 0 18 14"><path d="M9 13.5 0 4.2A13 13 0 0 1 18 4.2z" opacity=".95"/></svg>'+
  '<svg viewBox="0 0 16 14"><path d="M0 14h3v-3H0zm4.3 0h3V8h-3zm4.4 0h3V4.5h-3zM13 14h3V0h-3z"/></svg>'+
- '<svg viewBox="0 0 27 14"><rect x=".75" y=".75" width="22.5" height="12.5" rx="3.5" fill="none" stroke="#fff" stroke-width="1.5" opacity=".6"/><rect x="2.6" y="2.6" width="16" height="8.8" rx="2"/><path d="M24.8 4.8h.8a1.2 1.2 0 0 1 1.2 1.2v2a1.2 1.2 0 0 1-1.2 1.2h-.8z" opacity=".6"/></svg>'+
- '<span class="bt">78</span></span></div>';
+ '<svg viewBox="0 0 27 14"><rect x=".75" y=".75" width="22.5" height="12.5" rx="3.5" fill="none" stroke="#fff" stroke-width="1.5" opacity=".6"/><rect x="2.6" y="2.6" width="17.9" height="8.8" rx="2"/><path d="M24.8 4.8h.8a1.2 1.2 0 0 1 1.2 1.2v2a1.2 1.2 0 0 1-1.2 1.2h-.8z" opacity=".6"/></svg>'+
+ '<span class="bt">94</span></span></div>';
 R.querySelectorAll('.phone .screen').forEach(scr=>{
   const m=document.createElement('div');m.className='media';
   const ph=scr.parentElement,sh=document.createElement('div');sh.className='shell';ph.insertBefore(sh,scr);sh.appendChild(scr);
