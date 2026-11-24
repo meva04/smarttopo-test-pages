@@ -41,6 +41,7 @@
 (function(){
   var OK=/\/(main\/main|introduce\/introduce_01)\.html$/;
   function allowed(a){
+    if(a.closest('#st26,#st26m')) return true;   // 우리가 납품하는 블록(소개·메인 section01) 안의 링크는 실제처럼 동작
     var h=(a.getAttribute('href')||'').trim();
     if(!h||h.charAt(0)==='#'||/^javascript:\s*(void\(0\);?|;)?\s*$/i.test(h)) return true;
     if(/^javascript:/i.test(h)) return false;
