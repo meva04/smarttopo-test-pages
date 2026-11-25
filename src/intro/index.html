@@ -301,6 +301,10 @@
   }
   /* 6가지 기능: 한 줄로 쌓이는 화면(태블릿·모바일)에서는 가운데 정렬 */
   @media (max-width:960px){
+    .hero .wrap>div:first-child{text-align:center}   /* 히어로: 한 줄로 쌓이는 화면에서는 글·버튼 가운데 정렬 */
+    .hero .hero-logo{margin-inline:auto}
+    .hero .lead{margin-inline:auto}
+    .hero .ctas{justify-content:center}
     .fitem{align-items:center;text-align:center}
     .fitem .no{justify-content:center}
     .fitem p.desc{margin-inline:auto}
@@ -466,7 +470,7 @@
   <div class="wrap">
     <img class="sym" src="assets/smarttopo_logo_white.svg" alt="SmartTopo" width="191" height="34">
     <h2 id="cl-title">새로운 SmartTopo, 현장에서 직접 확인하세요</h2>
-    <p>더 편리해진 매뉴와 사진 측량, 기준점측량 보고서까지.<br>측량 현장의 단계를 줄인 새 버전을 만나보세요.</p>
+    <p>더 편리해진 메뉴와 사진 측량, 기준점 측량 보고서까지.<br>측량 현장의 단계를 줄인 새 버전을 만나보세요.</p>
     <div class="ctas" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px">
       <a class="btn btn-blue mag" href="#contact" data-placeholder="download">앱 다운로드</a>
       <a class="btn btn-ghost mag" href="https://stopo.co.kr/bbs/?so_table=movie" target="_blank" rel="noopener" aria-label="동영상 매뉴얼 (새 창)">동영상 매뉴얼</a>

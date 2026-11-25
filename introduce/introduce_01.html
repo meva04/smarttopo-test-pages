@@ -203,7 +203,7 @@
 
 				<div id="contents" class="v2022">
 					<div id="sub_nav" class="v2022">
-						<div class="sub_visual" style="background:url(../images/2024ver/sub/sub_visual_1.jpg)  no-repeat center left;">
+						<div class="sub_visual" style="background:url(../images/2024ver/sub/sub_visual_2026.jpg)  no-repeat center left;">
 							<p>제품소개</p>
 						</div>
 						<div class="dep2 clear_fix">
@@ -221,7 +221,7 @@
 						<div class="sub ">
 							<div class="box01">
 									<!-- 디자인페이지 시작 -->
-<!-- [테스트] 여기에 ../../웹페이지/index.html 의 <div id="st26"> 블록이 그대로 들어갑니다.
+<!-- [테스트] 여기에 ../../소개페이지/index.html 의 <div id="st26"> 블록이 그대로 들어갑니다.
      실제 사이트에서는 이 자리에 그 블록을 붙여 넣으면 됩니다. -->
 <div id="st26-mount"></div>
 <!-- 파일을 더블클릭해 열었을 때(file://)를 위한 사본. '테스트페이지 열기.command' 를 실행하면 최신 내용으로 다시 만들어집니다. -->
@@ -234,7 +234,7 @@
   function inject(html){
     html=html.replace(/(["'`(])assets\//g,'$1'+ASSETS);
     var doc=new DOMParser().parseFromString(html,'text/html'), block=doc.getElementById('st26');
-    if(!block) return fail('웹페이지/index.html 에서 &lt;div id="st26"&gt; 블록을 찾지 못했습니다.');
+    if(!block) return fail('소개페이지/index.html 에서 &lt;div id="st26"&gt; 블록을 찾지 못했습니다.');
     var scripts=[].slice.call(block.querySelectorAll('script')).map(function(s){var t=s.textContent;s.remove();return t});
     mount.replaceWith(block);
     scripts.forEach(function(t){var s=document.createElement('script');s.textContent=t;document.body.appendChild(s)});

@@ -120,6 +120,10 @@
 
   @media (max-width:960px){
     .wrap{grid-template-columns:1fr;gap:64px;padding-top:calc(var(--head) + 40px);min-height:0}
+    .wrap>div:first-child{text-align:center}   /* 한 줄로 쌓이는 화면에서는 글·버튼 가운데 정렬 */
+    .logo{display:block;margin-inline:auto}
+    .lead{margin-inline:auto}
+    .ctas{justify-content:center}
     .readout.r1{left:-14px;top:40px}.readout.r2{right:-14px;top:auto;bottom:150px}.readout.r3{left:-14px;bottom:24px}
   }
   @media (max-width:420px){.readout{font-size:11px}.readout.r1,.readout.r3{font-size:13px;padding:12px 14px;border-radius:12px;gap:5px}.readout.r1 .row>span:first-child{width:32px}.readout.r3 .ck{width:15px;height:15px}}
