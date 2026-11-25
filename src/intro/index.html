@@ -196,10 +196,6 @@
   .thumb[aria-pressed="true"]{border-color:var(--blue);opacity:1;box-shadow:0 8px 18px -10px rgba(1,154,235,.7)}
   .thumb.vid{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font:500 18px var(--f-body);color:var(--ink-2)}
   .thumb.vid svg{width:26px;height:26px;fill:var(--blue)}
-  .report{margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px;overflow:hidden}
-  .report figcaption{font-family:var(--f-mono);font-size:18px;color:var(--ink-2);margin-bottom:10px}
-  .report img{border-radius:8px;width:100%;transition:transform .8s var(--ease)}
-  .report:hover img{transform:scale(1.04)}
   .m-phone{display:none}
   @media (max-width:960px){
     .fgrid{grid-template-columns:1fr;gap:0}
@@ -508,7 +504,7 @@ const F=[
  {id:'f3',fc:'#fbfefb',t:'측량 단계 간소화',s:'측량 화면에서 설정 후 바로 측량',d:'측량 전 설정 단계를 줄여 지도 화면에서 바로 측량할 수 있습니다. 일반측량 → 측량 준비 화면 → 측량 시작이던 흐름이 일반측량 → 측량 시작으로 바뀌었습니다.',v:'f3',im:['s3a','s3b'],alt:['지도 화면에서 측량','측량 진행 화면']},
  {id:'f4',fc:'#fbfefb',t:'사진 측량',s:'폴대를 세울 수 없는 위치도 사진으로',d:'건물 모서리 등 폴대를 세울 수 없어 측량하기 어려운 위치도 측량할 수 있습니다. 해당 위치를 사진으로 촬영한 뒤, 사진에서 원하는 지점을 선택하면 좌표가 추출됩니다.',v:'f4',im:['s4a','s4b'],alt:['여러 각도에서 자동 촬영','사진에서 지점 선택 후 좌표 추출']},
  {id:'f5',fc:'#fbfefb',t:'사진으로 좌표 입력',s:'포인트점·측설점·도로 IP 좌표를 찍어서 추가',d:'측설점이나 도로 IP점의 좌표를 직접 타이핑하지 않아도 됩니다. 자료를 카메라로 찍거나 앨범에서 불러오면 사진 속 좌표를 자동으로 읽어 바로 추가합니다.',v:'f5',im:['s5a','s5b'],alt:['좌표 영역을 드래그해 인식','인식된 좌표 목록']},
- {id:'f6',fc:'#fbfefb',t:'기준점측량 지원',s:'공공측량 작업규정에 맞춘 측량부터 보고서까지',d:'공공측량 작업규정에 맞춰 설정되어 있어, 기준점측량부터 공공측량 형식의 보고서 출력까지 한 번에 끝낼 수 있습니다.',v:'f6',im:['s6a'],alt:['기준점측량 진행 화면'],report:true}
+ {id:'f6',fc:'#fbfefb',t:'기준점측량 지원',s:'공공측량 작업규정에 맞춘 측량부터 보고서까지',d:'공공측량 작업규정에 맞춰 설정되어 있어, 기준점측량부터 공공측량 형식의 보고서 출력까지 한 번에 끝낼 수 있습니다.',v:'f6',im:['s6a'],alt:['기준점측량 진행 화면']}
 ];
 const U=[
  {k:'Snap',t:'스냅 기능 확대',d:'측량 및 측설 화면에서 지도상의 위치를 스냅 기능으로 쉽게 선택하고, 즉시 작업을 수행할 수 있습니다.',im:'u_snap',crop:'full',nofoot:true},
@@ -532,7 +528,6 @@ F.forEach((f,i)=>{
     <button type="button" class="thumb vid" id="t${i}v" data-f="${i}" data-src="" aria-pressed="true">${play}영상</button>
     ${f.im.map((m,j)=>`<button type="button" class="thumb" id="t${i}-${j}" data-f="${i}" data-src="assets/${m}.webp" aria-pressed="false" aria-label="${f.alt[j]}"><img src="assets/${m}.webp" alt="" loading="lazy"></button>`).join('')}
   </div>
-  ${f.report?`<figure class="report" style="margin:0"><figcaption>[ 출력 보고서 양식 ]</figcaption><img src="assets/report.webp" alt="공공측량 형식의 기준점측량 출력 보고서" loading="lazy"></figure>`:''}
   <div class="m-phone"><div class="phone"${f.fc?` style="--foot:${f.fc}"`:''}><div class="screen"><video data-src="assets/${f.v}.mp4" poster="assets/${f.im[0]}.webp" muted loop playsinline preload="none" aria-label="${f.t} 화면 녹화"></video></div></div></div>`;
   list.appendChild(a);
   const v=document.createElement('video');Object.assign(v,{muted:true,loop:true,playsInline:true,preload:'none'});
